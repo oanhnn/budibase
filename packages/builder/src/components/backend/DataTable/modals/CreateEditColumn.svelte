@@ -118,9 +118,7 @@
     if (field.type !== LINK_TYPE) {
       delete field.fieldName
     }
-    if (inputOptions?.length > 0) {
-      field.constraints.inclusion = inputOptions
-    }
+    field.constraints.inclusion = inputOptions
     try {
       await tables.saveField({
         originalName,
