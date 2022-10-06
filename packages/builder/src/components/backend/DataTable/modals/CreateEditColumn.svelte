@@ -57,6 +57,7 @@
   }
 
   let originalName = field.name
+  let inputOptions = field.constraints.inclusion
   const linkEditDisabled = originalName != null
   let primaryDisplay =
     $tables.selected.primaryDisplay == null ||
@@ -117,6 +118,9 @@
     if (field.type !== LINK_TYPE) {
       delete field.fieldName
     }
+    if (inputOptions?.length > 0) {
+      field.constraints.inclusion = inputOptions
+    }
     try {
       await tables.saveField({
         originalName,
@@ -130,7 +134,7 @@
     }
   }
 
-  function cancelEdit() {
+  export function cancelEdit() {
     field.name = originalName
   }
 
@@ -334,6 +338,7 @@
   onConfirm={saveColumn}
   onCancel={cancelEdit}
   disabled={invalid}
+  cancelOnClose
 >
   <Input
     label="Name"
@@ -399,10 +404,7 @@
       bind:value={field.constraints.length.maximum}
     />
   {:else if field.type === "options"}
-    <ValuesList
-      label="Options (one per line)"
-      bind:values={field.constraints.inclusion}
-    />
+    <ValuesList label="Options (one per line)" bind:values={inputOptions} />
   {:else if field.type === "longform"}
     <div>
       <Label
@@ -417,10 +419,7 @@
       />
     </div>
   {:else if field.type === "array"}
-    <ValuesList
-      label="Options (one per line)"
-      bind:values={field.constraints.inclusion}
-    />
+    <ValuesList label="Options (one per line)" bind:values={inputOptions} />
   {:else if field.type === "datetime"}
     <DatePicker
       label="Earliest"

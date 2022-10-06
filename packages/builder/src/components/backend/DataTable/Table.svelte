@@ -33,6 +33,7 @@
   let editRowModal
   let editColumnModal
   let customRenderers = []
+  let createEditColumn
 
   $: isInternal = type !== "external"
   $: isUsersTable = tableId === TableNames.USERS
@@ -165,8 +166,12 @@
 <Modal bind:this={editRowModal}>
   <svelte:component this={editRowComponent} on:updaterows row={editableRow} />
 </Modal>
-<Modal bind:this={editColumnModal}>
+<Modal
+  bind:this={editColumnModal}
+  on:cancel={() => createEditColumn?.cancelEdit()}
+>
   <CreateEditColumn
+    bind:this={createEditColumn}
     field={editableColumn}
     on:updatecolumns
     onClosed={editColumnModal.hide}

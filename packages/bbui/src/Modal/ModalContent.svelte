@@ -18,6 +18,7 @@
   export let onCancel = undefined
   export let disabled = false
   export let showDivider = true
+  export let cancelOnClose = false
 
   export let showSecondaryButton = false
   export let secondaryButtonText = undefined
@@ -130,7 +131,16 @@
     {/if}
     {#if showCloseIcon}
       <div class="close-icon">
-        <Icon hoverable name="Close" on:click={cancel} />
+        <Icon
+          hoverable
+          name="Close"
+          on:click={() => {
+            if (cancelOnClose) {
+              onCancel()
+            }
+            cancel()
+          }}
+        />
       </div>
     {/if}
   </div>
